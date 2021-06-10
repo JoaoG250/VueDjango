@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:13.2
+    env_file:
+      - ./env_files/db.env
+  
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: vuedjango:1.0
+    env_file:
+      - ./env_files/web.env
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./vuedjango:/usr/src/vuedjango/
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
